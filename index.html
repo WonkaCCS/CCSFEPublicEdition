@@ -15,13 +15,6 @@ body {
     align-items: center;
     background-image: url('ng1.jpg'); /* Specify your single background image */
 }
-
-#muteButton {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: pointer;
-}
 </style>
 <script>
 window.getLevelCode = function() {
@@ -46,34 +39,6 @@ function callGetLevelCode() {
 
 document.addEventListener("DOMContentLoaded", function() {
     setTimeout(callGetLevelCode, 100);
-
-    var isMuted = false;
-    var muteButton = document.getElementById("muteButton");
-
-    muteButton.addEventListener("click", function() {
-        isMuted = !isMuted;
-        muteButton.src = isMuted ? 'music_off.png' : 'music_on.png';
-
-        var flashElement = document.getElementById("flash");
-
-        if (flashElement) {
-            var flashContainer = flashElement.parentNode;
-
-            if (flashContainer) {
-                flashContainer.removeChild(flashElement);
-
-                var newFlashElement = document.createElement("embed");
-                newFlashElement.id = "flash";
-                newFlashElement.src = "ccgame_levelLoader.swf";
-                newFlashElement.type = "application/x-shockwave-flash";
-                newFlashElement.width = "755";
-                newFlashElement.height = "600";
-                newFlashElement.setAttribute("flashvars", "mute=" + (isMuted ? "1" : "0"));
-
-                flashContainer.appendChild(newFlashElement);
-            }
-        }
-    });
 });
 </script>
 </head>
@@ -81,6 +46,5 @@ document.addEventListener("DOMContentLoaded", function() {
 <center>
     <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
 </center>
-<img id="muteButton" src="music_on.png" width="50" height="50">
 </body>
 </html>
