@@ -13,16 +13,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('ng1.jpg');
+    background-image: url('ng1.jpg'); /* Specify your single background image */
 }
 
-#toggleImage {
+#muteButton {
     position: absolute;
     top: 20px;
     right: 20px;
     cursor: pointer;
-    width: 50px;
-    height: 50px;
 }
 </style>
 <script>
@@ -48,30 +46,29 @@ function callGetLevelCode() {
 
 document.addEventListener("DOMContentLoaded", function() {
     setTimeout(callGetLevelCode, 100);
-});
 
-function toggleImageAndMute() {
-    var toggleImage = document.getElementById('toggleImage');
-    var flashElement = document.getElementById('flash');
-    
-    if (flashElement) {
-        if (flashElement.isMuted) {
-            flashElement.isMuted = false;
-            flashElement.setVolume(1); // Unmute
-            toggleImage.src = 'music_on.png';
+    var isMuted = false;
+    var muteButton = document.getElementById("muteButton");
+    var flashElement = document.getElementById("flash");
+
+    muteButton.addEventListener("click", function() {
+        isMuted = !isMuted;
+        muteButton.src = isMuted ? 'music_off.png' : 'music_on.png';
+
+        // Mute/Unmute the Flash content
+        if (flashElement && flashElement.SetVariable) {
+            flashElement.SetVariable("volume", isMuted ? "0" : "100");
         } else {
-            flashElement.isMuted = true;
-            flashElement.setVolume(0); // Mute
-            toggleImage.src = 'music_off.png';
+            console.error("Flash element does not support SetVariable method");
         }
-    }
-}
+    });
+});
 </script>
 </head>
 <body>
 <center>
     <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
 </center>
-<img id="toggleImage" src="music_on.png" onclick="toggleImageAndMute()" alt="Toggle Image">
+<img id="muteButton" src="music_on.png" width="50" height="50">
 </body>
 </html>
