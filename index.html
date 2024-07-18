@@ -55,15 +55,30 @@ document.addEventListener("DOMContentLoaded", function() {
         isMuted = !isMuted;
         muteButton.src = isMuted ? 'music_off.png' : 'music_on.png';
 
-        // Mute/Unmute the Flash content by setting volume attribute
-        flashElement.setAttribute("volume", isMuted ? "0" : "100");
+        // Mute/Unmute the Flash content by embedding it with a muted state
+        var flashContainer = flashElement.parentNode;
+        flashContainer.removeChild(flashElement);
+        
+        var newFlashElement = document.createElement("embed");
+        newFlashElement.id = "flash";
+        newFlashElement.src = "ccgame_levelLoader.swf";
+        newFlashElement.type = "application/x-shockwave-flash";
+        newFlashElement.width = "755";
+        newFlashElement.height = "600";
+        newFlashElement.style.display = "none";
+
+        flashContainer.appendChild(newFlashElement);
+        
+        setTimeout(() => {
+            newFlashElement.style.display = "block";
+        }, 10);
     });
 });
 </script>
 </head>
 <body>
 <center>
-    <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600" volume="100">
+    <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
 </center>
 <img id="muteButton" src="music_on.png" width="50" height="50">
 </body>
