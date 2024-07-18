@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
         isMuted = !isMuted;
         muteButton.src = isMuted ? 'music_off.png' : 'music_on.png';
 
-        // Mute/Unmute the Flash content by embedding it with a muted state
+        // Mute/Unmute the Flash content by reloading it with/without sound
         var flashContainer = flashElement.parentNode;
         flashContainer.removeChild(flashElement);
         
@@ -65,13 +65,11 @@ document.addEventListener("DOMContentLoaded", function() {
         newFlashElement.type = "application/x-shockwave-flash";
         newFlashElement.width = "755";
         newFlashElement.height = "600";
-        newFlashElement.style.display = "none";
+        if (isMuted) {
+            newFlashElement.setAttribute("wmode", "transparent"); // Trying to mute by setting wmode
+        }
 
         flashContainer.appendChild(newFlashElement);
-        
-        setTimeout(() => {
-            newFlashElement.style.display = "block";
-        }, 10);
     });
 });
 </script>
