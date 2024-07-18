@@ -49,27 +49,30 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var isMuted = false;
     var muteButton = document.getElementById("muteButton");
-    var flashElement = document.getElementById("flash");
 
     muteButton.addEventListener("click", function() {
         isMuted = !isMuted;
         muteButton.src = isMuted ? 'music_off.png' : 'music_on.png';
 
-        // Mute/Unmute the Flash content by reloading it with/without sound
-        var flashContainer = flashElement.parentNode;
-        flashContainer.removeChild(flashElement);
-        
-        var newFlashElement = document.createElement("embed");
-        newFlashElement.id = "flash";
-        newFlashElement.src = "ccgame_levelLoader.swf";
-        newFlashElement.type = "application/x-shockwave-flash";
-        newFlashElement.width = "755";
-        newFlashElement.height = "600";
-        if (isMuted) {
-            newFlashElement.setAttribute("wmode", "transparent"); // Trying to mute by setting wmode
-        }
+        var flashElement = document.getElementById("flash");
 
-        flashContainer.appendChild(newFlashElement);
+        if (flashElement) {
+            var flashContainer = flashElement.parentNode;
+
+            if (flashContainer) {
+                flashContainer.removeChild(flashElement);
+
+                var newFlashElement = document.createElement("embed");
+                newFlashElement.id = "flash";
+                newFlashElement.src = "ccgame_levelLoader.swf";
+                newFlashElement.type = "application/x-shockwave-flash";
+                newFlashElement.width = "755";
+                newFlashElement.height = "600";
+                newFlashElement.setAttribute("flashvars", "mute=" + (isMuted ? "1" : "0"));
+
+                flashContainer.appendChild(newFlashElement);
+            }
+        }
     });
 });
 </script>
