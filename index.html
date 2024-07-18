@@ -2,9 +2,10 @@
 <html>
 <head>
 <title>Candy Crush Custom Level!!</title>
-<style id="backgroundStyle"></style>
 <style>
 body {
+    background: no-repeat center center fixed;
+    background-size: cover;
     color: white;
     margin: 0;
     padding: 0;
@@ -12,50 +13,38 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
-    overflow: hidden;
-}
-
-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('ng1.jpg') no-repeat center center fixed;
-    background-size: cover;
-    filter: none(10px);
-    z-index: -1;
-}
-
-#flash {
-    width: 755px;
-    height: 600px;
-    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5);
-    position: relative;
-    z-index: 1;
+    background-image: url('ng1.jpg'); /* Specify your single background image */
 }
 </style>
-</head>
-<body>
-<center><embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash"></center>
-
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Set the background image URL using the generated number
-    document.getElementById("backgroundStyle").textContent = 'body::before { background: url(\'ng1.jpg\') no-repeat center center fixed; background-size: cover; }';
-    
-    window.getLevelCode = function() {
-        console.log("GetLevelCode")
-        return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;")
-    }
+window.getLevelCode = function() {
+    console.log("GetLevelCode");
+    return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;");
+};
 
-    setTimeout(function() {
-        document.getElementById("flash").getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]))
-    }, 2500)
+function callGetLevelCode() {
+    var flashElement = document.getElementById("flash");
+    try {
+        if (flashElement && typeof flashElement.getLevelCode === "function") {
+            flashElement.getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]));
+        } else {
+            console.error("getLevelCode is not a function on flash element");
+            setTimeout(callGetLevelCode, 100); // Retry after 100ms
+        }
+    } catch (e) {
+        console.error("Error calling getLevelCode: ", e);
+        setTimeout(callGetLevelCode, 100); // Retry after 100ms
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(callGetLevelCode, 100);
 });
 </script>
-
+</head>
+<body>
+<center>
+    <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
+</center>
 </body>
 </html>
