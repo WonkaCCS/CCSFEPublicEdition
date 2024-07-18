@@ -15,6 +15,15 @@ body {
     align-items: center;
     background-image: url('ng1.jpg'); /* Specify your single background image */
 }
+
+#toggleImage {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+}
 </style>
 <script>
 window.getLevelCode = function() {
@@ -40,11 +49,29 @@ function callGetLevelCode() {
 document.addEventListener("DOMContentLoaded", function() {
     setTimeout(callGetLevelCode, 100);
 });
+
+function toggleImageAndMute() {
+    var toggleImage = document.getElementById('toggleImage');
+    var flashElement = document.getElementById('flash');
+    
+    if (flashElement) {
+        if (flashElement.isMuted) {
+            flashElement.isMuted = false;
+            flashElement.setVolume(1); // Unmute
+            toggleImage.src = 'music_on.png';
+        } else {
+            flashElement.isMuted = true;
+            flashElement.setVolume(0); // Mute
+            toggleImage.src = 'music_off.png';
+        }
+    }
+}
 </script>
 </head>
 <body>
 <center>
     <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
 </center>
+<img id="toggleImage" src="music_on.png" onclick="toggleImageAndMute()" alt="Toggle Image">
 </body>
 </html>
