@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Candy Crush Custom Level!!</title>
+<style>
+body {
+    background: no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('ng1.jpg'); 
+}
+</style>
+<script>
+window.getLevelCode = function() {
+    console.log("GetLevelCode");
+    return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;");
+};
+
+function callGetLevelCode() {
+    var flashElement = document.getElementById("flash");
+    try {
+        if (flashElement && typeof flashElement.getLevelCode === "function") {
+            flashElement.getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]));
+        } else {
+            console.error("getLevelCode is not a function on flash element");
+            setTimeout(callGetLevelCode, 10000000000000000); // Retry after 100ms
+        }
+    } catch (e) {
+        console.error("Error calling getLevelCode: ", e);
+        setTimeout(callGetLevelCode, 10000000000000000); // Retry after 100ms
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(callGetLevelCode, 10000000000000000);
+});
+</script>
+</head>
+<body>
+<center>
+    <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
+</center>
+</body>
+</html>
