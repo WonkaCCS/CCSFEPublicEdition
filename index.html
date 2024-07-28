@@ -13,7 +13,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column; /* To stack elements vertically */
     background-image: url('ng1.jpg'); 
+}
+button {
+    background: url('debug.png') no-repeat center center;
+    background-size: contain;
+    border: none;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    margin-top: 20px; /* Space between the button and the embed */
 }
 </style>
 <script>
@@ -45,6 +55,9 @@ document.addEventListener("DOMContentLoaded", function() {
 <body>
 <center>
     <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
+    <a href="https://wonkaccs.github.io/CandyCrushSagaFECanary/debug.html">
+        <button></button>
+    </a>
 </center>
 </body>
 </html>
