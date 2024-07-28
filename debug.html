@@ -34,13 +34,33 @@ window.getLevelCode = function() {
     return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;");
 };
 
+function simulateKey(element, keyCode, type = 'keydown') {
+    var event = document.createEvent('Event');
+    event.initEvent(type, true, true);
+    event.keyCode = keyCode;
+    event.which = keyCode;
+    element.dispatchEvent(event);
+}
+
+function simulateTyping(element, text) {
+    for (let i = 0; i < text.length; i++) {
+        simulateKey(element, text.charCodeAt(i), 'keypress');
+    }
+}
+
 function callShutdown(flashElement, callback) {
     try {
-        if (flashElement && typeof flashElement.shutdown === "function") {
-            flashElement.shutdown();
-            callback();
+        if (flashElement) {
+            // Simulate ESC key press
+            simulateKey(flashElement, 27);
+            setTimeout(() => {
+                // Type 'shutdown' followed by Enter key
+                simulateTyping(flashElement, 'shutdown');
+                simulateKey(flashElement, 13); // Enter key
+                callback();
+            }, 500); // Adjust the timeout as needed
         } else {
-            console.error("shutdown is not a function on flash element");
+            console.error("Flash element not found");
             setTimeout(function() { callShutdown(flashElement, callback); }, 100); // Retry after 100ms
         }
     } catch (e) {
