@@ -13,8 +13,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
     background-image: url('ng1.jpg'); 
+    position: relative; /* Needed to position the button absolutely within the body */
 }
 button {
     background: url('debug.png') no-repeat center center;
@@ -23,7 +23,9 @@ button {
     width: 45px;
     height: 45px;
     cursor: pointer;
-    margin-top: 20px; /* Space between the button and the debug button */
+    position: absolute;
+    top: 10px; /* Distance from the top */
+    right: 10px; /* Distance from the right */
 }
 </style>
 <script>
@@ -55,9 +57,9 @@ document.addEventListener("DOMContentLoaded", function() {
 <body>
 <center>
     <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
-    <a href="https://wonkaccs.github.io/CandyCrushSagaFECanary/debug.html">
-        <button></button>
-    </a>
 </center>
+<a href="https://wonkaccs.github.io/CandyCrushSagaFECanary/debug.html">
+    <button></button>
+</a>
 </body>
 </html>
