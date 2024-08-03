@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Candy Crush Custom Level!!</title>
+<title>Candy Crush Custom Level</title>
 <style>
 body {
     background: no-repeat center center fixed;
@@ -13,22 +13,55 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('ng1.jpg'); 
-    position: relative;
 }
-button {
-    background: url('debug.png') no-repeat center center;
-    background-size: contain;
-    border: none;
-    width: 45px;
-    height: 45px;
-    cursor: pointer;
+
+#flash {
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 1.0);
+}
+
+#restartButton,
+#shuffleButton {
     position: absolute;
-    top: 10px; 
-    right: 10px; 
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 50px;
+    height: 50px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent; /* Ensure button background is transparent */
+}
+
+#restartButton {
+    top: 20px;
+    right: 20px;
+    background-image: url('restart.png');
+}
+
+#restartButton:active {
+    background-image: url('restart_pressed.png');
+}
+
+#shuffleButton {
+    top: 80px; 
+    right: 20px;
+    background-image: url('shuffle.png');
+}
+
+#shuffleButton:active {
+    background-image: url('shuffle_pressed.png');
 }
 </style>
 <script>
+function getRandomBackground() {
+    const num = Math.floor(Math.random() * 20) + 1;
+    return `bg${num}.jpg`;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.body.style.backgroundImage = `url('${getRandomBackground()}')`;
+});
+
 window.getLevelCode = function() {
     console.log("GetLevelCode");
     return decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]).replaceAll("\"","&quot;");
@@ -41,16 +74,42 @@ function callGetLevelCode() {
             flashElement.getLevelCode(decodeURIComponent(location.search.split("levelCode=")[1].split("&")[0]));
         } else {
             console.error("getLevelCode is not a function on flash element");
-            setTimeout(callGetLevelCode, 1); // Retry after 100ms
+            setTimeout(callGetLevelCode, 100); // Retry after 100ms
         }
     } catch (e) {
         console.error("Error calling getLevelCode: ", e);
-        setTimeout(callGetLevelCode, 1); // Retry after 100ms
+        setTimeout(callGetLevelCode, 100); // Retry after 100ms
     }
 }
 
+function playSound() {
+    var audio = new Audio('press.mp3');
+    audio.play();
+}
+
+function getUrlsFromFile() {
+    return fetch('urls.txt')
+        .then(response => response.text())
+        .then(text => text.split('\n').map(url => url.trim()).filter(url => url));
+}
+
 document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(callGetLevelCode, 1);
+    setTimeout(callGetLevelCode, 100);
+    document.getElementById("restartButton").addEventListener("click", function() {
+        playSound();
+        setTimeout(callGetLevelCode, 100);
+    });
+    document.getElementById("shuffleButton").addEventListener("click", function() {
+        playSound();
+        getUrlsFromFile().then(urls => {
+            if (urls.length > 0) {
+                const randomUrl = urls[Math.floor(Math.random() * urls.length)];
+                window.location.href = randomUrl;
+            } else {
+                console.error('No URLs found in the file.');
+            }
+        }).catch(error => console.error('Error reading URLs file:', error));
+    });
 });
 </script>
 </head>
@@ -58,8 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <center>
     <embed id="flash" src="ccgame_levelLoader.swf" type="application/x-shockwave-flash" width="755" height="600">
 </center>
-<a href="https://wonkaccs.github.io/CandyCrushSagaFECanary/debug.html?levelCode=">
-    <button></button>
-</a>
+<button id="restartButton"></button>
+<button id="shuffleButton"></button>
 </body>
 </html>
