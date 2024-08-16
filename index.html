@@ -69,10 +69,20 @@ function getRandomBackground() {
     return `bg${num}.jpg`;
 }
 
+function decodeLevelCode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const levelCode = urlParams.get('levelCode');
+    if (levelCode) {
+        return decodeURIComponent(levelCode);
+    }
+    return null;
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     document.body.style.backgroundImage = `url('${getRandomBackground()}')`;
 
-    if (window.location.href.includes('"enableSugarTrack":true')) {
+    const decodedLevelCode = decodeLevelCode();
+    if (decodedLevelCode && decodedLevelCode.includes('"enableSugarTrack":true')) {
         enableSugarDrops();
     }
 });
