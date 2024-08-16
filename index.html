@@ -108,7 +108,7 @@ function enableSugarDrops() {
     playSound();
     let currentUrl = window.location.href;
     if (!currentUrl.includes('/sugardropindex.html')) {
-        const newUrl = currentUrl.replace('?', '/sugardropindex.html?');
+        const newUrl = currentUrl.replace('?', 'sugardropindex.html?');
         window.location.href = newUrl;
     }
 }
