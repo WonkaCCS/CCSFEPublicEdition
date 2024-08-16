@@ -71,6 +71,10 @@ function getRandomBackground() {
 
 document.addEventListener("DOMContentLoaded", function() {
     document.body.style.backgroundImage = `url('${getRandomBackground()}')`;
+
+    if (window.location.href.includes('"enableSugarTrack":true')) {
+        enableSugarDrops();
+    }
 });
 
 window.getLevelCode = function() {
