@@ -20,7 +20,8 @@ body {
 }
 
 #restartButton,
-#shuffleButton {
+#shuffleButton,
+#sugarDropButton {
     position: absolute;
     background-size: contain;
     background-position: center;
@@ -29,7 +30,7 @@ body {
     height: 50px;
     border: none;
     cursor: pointer;
-    background-color: transparent; /* Ensure button background is transparent */
+    background-color: transparent;
 }
 
 #restartButton {
@@ -43,13 +44,23 @@ body {
 }
 
 #shuffleButton {
-    top: 80px; 
+    top: 80px;
     right: 20px;
     background-image: url('shuffle.png');
 }
 
 #shuffleButton:active {
     background-image: url('shuffle_pressed.png');
+}
+
+#sugarDropButton {
+    top: 140px;
+    right: 20px;
+    background-image: url('disable_sugardrops.png');
+}
+
+#sugarDropButton:active {
+    background-image: url('disable_sugardrops_pressed.png');
 }
 </style>
 <script>
@@ -58,8 +69,22 @@ function getRandomBackground() {
     return `bg${num}.jpg`;
 }
 
+function decodeLevelCode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const levelCode = urlParams.get('levelCode');
+    if (levelCode) {
+        return decodeURIComponent(levelCode);
+    }
+    return null;
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     document.body.style.backgroundImage = `url('${getRandomBackground()}')`;
+
+    const decodedLevelCode = decodeLevelCode();
+    if (decodedLevelCode && decodedLevelCode.includes('"enableSugarTrack":true')) {
+        enableSugarDrops();
+    }
 });
 
 window.getLevelCode = function() {
@@ -93,6 +118,15 @@ function getUrlsFromFile() {
         .then(text => text.split('\n').map(url => url.trim()).filter(url => url));
 }
 
+function enableSugarDrops() {
+    playSound();
+    let currentUrl = window.location.href;
+    if (currentUrl.includes('sugardropindex.html')) {
+        const newUrl = currentUrl.replace('sugardropindex.html', '');
+        window.location.href = newUrl;
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     setTimeout(callGetLevelCode, 100);
     document.getElementById("restartButton").addEventListener("click", function() {
@@ -110,6 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }).catch(error => console.error('Error reading URLs file:', error));
     });
+    document.getElementById("sugarDropButton").addEventListener("click", enableSugarDrops);
 });
 </script>
 </head>
@@ -119,5 +154,6 @@ document.addEventListener("DOMContentLoaded", function() {
 </center>
 <button id="restartButton"></button>
 <button id="shuffleButton"></button>
+<button id="sugarDropButton"></button>
 </body>
 </html>
